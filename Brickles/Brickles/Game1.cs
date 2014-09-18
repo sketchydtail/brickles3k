@@ -17,7 +17,8 @@ namespace Brickles3k
     public class Game1 : Game
     {
         private const float scaleRatio = 30f; //scale everything by this much
-        private readonly Dictionary<int, Brick> Bricks = new Dictionary<int, Brick>();
+        public LinkedList<Brick> Bricks = new LinkedList<Brick>(); 
+        //private readonly Dictionary<int, Brick> Bricks = new Dictionary<int, Brick>();
         private readonly Vector3 cameraPosition = new Vector3(0, 100, 2000f);
         private readonly Vector3 cameraTarget = new Vector3(0f, 0f, 0f);
         public GraphicsDeviceManager graphics;
@@ -26,7 +27,7 @@ namespace Brickles3k
         private readonly Player player = new Player();
         private readonly List<Vector3> sortedBricks = new List<Vector3>();
         private List<Vector3> BrickList = new List<Vector3>();
-        private Model PaddleModel;
+        //private Model PaddleModel;
 
         private Matrix ProjectionMatrix;
         private Matrix ViewMatrix;
@@ -34,25 +35,20 @@ namespace Brickles3k
         //private Matrix WorldMatrix;
         private Texture2D background;
         private Model brickModel;
-        public Matrix[] brickTransforms;
+        //public Matrix[] brickTransforms;
         private int camAngle = 0;
         private Vector3 cameraUpVector;
 
 
-        public Matrix[] courtLocalTransforms;
-        private Model courtModel;
-        public Vector3 courtPosition; //the bricks game position, modified from csv file
-        public Vector3 courtRotation;
-        public Matrix courtWorldMatrix;
+        //public Matrix[] courtLocalTransforms;
+        //private Model courtModel;
+        //public Vector3 courtPosition; //the bricks game position, modified from csv file
+        //public Vector3 courtRotation;
+        //public Matrix courtWorldMatrix;
         public Boolean debugging = true;
 
 
-        private int drawbricknum = 0;
-
-        private Matrix[] easterEggLocalTranforms;
-        private Model easterEggModel;
-        public Vector3 easterEggPosition;
-        private Matrix easterEggWorldMatrix;
+        //private int drawbricknum = 0;
         public Texture2D hand;
         public Vector2 handPosition;
         private Texture2D jointTexture;

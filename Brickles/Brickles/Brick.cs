@@ -14,14 +14,23 @@ using System.Collections.Generic;
 
 namespace Brickles3k
 {
-    class Brick
+    public class Brick
     {
-        public Vector3 position;    //the bricks game position, modified from csv file
-        public Model model;         //bricks model file, used if different types of bricks are needed
-        public Matrix[] localTransforms;
-        public Vector3 brickRotation;
-        public Matrix WorldMatrix;
-        public Vector3 gridPos;     //the value read from csv
-        public Vector3 colour;
+        public Vector3 Position;    //the bricks game position, modified from csv file
+        public Model Model;         //bricks model file, used if different types of bricks are needed
+        public Matrix Transform;
+        public Vector3 GridPos;     //the value read from csv
+        public Vector3 Colour;
+
+        public Brick(Vector3 gridPos, float brickSize)
+        {
+            GridPos = gridPos;
+            
+        }
+
+        public virtual void Draw(GameTime gameTime)
+        {
+            
+        }
     }
 }
