@@ -27,8 +27,8 @@ namespace Brickles
                 DiscoverKinectSensor();
 
                 Debug.WriteLineIf(Game1.game.debugging, kinect.Status);
-                joint = Content.Load<Texture2D>("Sprites/joint");
-                hand = Content.Load<Texture2D>("Sprites/hand");
+                joint = Game1.game.Content.Load<Texture2D>("Sprites/joint");
+                hand = Game1.game.Content.Load<Texture2D>("Sprites/hand");
             }
             catch (Exception e)
             {

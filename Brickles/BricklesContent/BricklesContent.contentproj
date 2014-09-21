@@ -39,6 +39,14 @@
     <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Maps\brixel_sphere.csv">
+      <Name>brixel_sphere</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\brixel_sphere_new.csv">
+      <Name>brixel_sphere_new</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Maps\testmap.csv">
       <Name>testmap</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

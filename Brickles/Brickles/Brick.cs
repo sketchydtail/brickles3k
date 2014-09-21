@@ -23,7 +23,7 @@ namespace Brickles
             Colour = new Vector3((float) rand.NextDouble(), (float) rand.NextDouble(),
                 (float) rand.NextDouble());
 
-            Model = Content.Load<Model>("Models/brick_square");
+            Model = Game1.game.Content.Load<Model>("Models/brick_square");
         }
 
         public virtual void Draw(GameTime gameTime)

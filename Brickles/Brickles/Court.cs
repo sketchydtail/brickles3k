@@ -11,7 +11,7 @@ namespace Brickles
             Position = new Vector3(0, 400, -500); //save modified position
             Transform = Matrix.CreateScale(Game1.scaleRatio*6, Game1.scaleRatio*6, Game1.scaleRatio*12)*
                         Matrix.CreateRotationX((float) Math.PI)*Matrix.CreateTranslation(Position);
-            Model = Content.Load<Model>("Models/court_seperated_v01");
+            Model = Game1.game.Content.Load<Model>("Models/court_seperated_v01");
         }
 
         public virtual void Draw(GameTime gameTime)

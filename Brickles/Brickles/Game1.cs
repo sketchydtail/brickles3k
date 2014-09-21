@@ -25,8 +25,6 @@ namespace Brickles
         private Matrix ProjectionMatrix;
         private Matrix ViewMatrix;
         private KinectManager _kinectMan;
-        private float aspectRatio;
-
 
         //private Model PaddleModel;
 
@@ -39,8 +37,6 @@ namespace Brickles
         public Boolean debugging = true;
         public GraphicsDeviceManager graphics;
 
-
-        //private int drawbricknum = 0;
         public Texture2D hand;
         public Vector2 handPosition;
         private Texture2D jointTexture;
