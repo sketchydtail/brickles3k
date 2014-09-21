@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Brickles3k
+namespace Brickles
 {
-    class KinectManager
+    internal class KinectManager : Game
     {
-        
-
+        private readonly Texture2D hand;
+        private readonly Texture2D joint;
+        private Game _game;
         public Texture2D colourVideo;
         public string connectedStatus = "Not connected";
         public Texture2D depthVideo;
@@ -20,11 +18,22 @@ namespace Brickles3k
         public bool kinected;
         public Skeleton skeleton;
         public Skeleton[] skeletonData;
-        private Game _game;
 
         public KinectManager()
         {
+            try
+            {
+                KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
+                DiscoverKinectSensor();
 
+                Debug.WriteLineIf(Game1.game.debugging, kinect.Status);
+                joint = Content.Load<Texture2D>("Sprites/joint");
+                hand = Content.Load<Texture2D>("Sprites/hand");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+            }
         }
 
         public void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
@@ -63,25 +72,25 @@ namespace Brickles3k
             switch (kinect.Status)
             {
                 case KinectStatus.Connected:
-                    {
-                        connectedStatus = "Status: Connected";
-                        break;
-                    }
+                {
+                    connectedStatus = "Status: Connected";
+                    break;
+                }
                 case KinectStatus.Disconnected:
-                    {
-                        connectedStatus = "Status: Disconnected";
-                        break;
-                    }
+                {
+                    connectedStatus = "Status: Disconnected";
+                    break;
+                }
                 case KinectStatus.NotPowered:
-                    {
-                        connectedStatus = "Status: Connect the power";
-                        break;
-                    }
+                {
+                    connectedStatus = "Status: Connect the power";
+                    break;
+                }
                 default:
-                    {
-                        connectedStatus = "Status: Error";
-                        break;
-                    }
+                {
+                    connectedStatus = "Status: Error";
+                    break;
+                }
             }
 
             // Init the found and connected device
@@ -157,7 +166,8 @@ namespace Brickles3k
                 }
 
                 // Create a texture and assign the realigned pixels
-                colourVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
+                colourVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, colorVideoFrame.Width,
+                    colorVideoFrame.Height);
                 colourVideo.SetData(bgraPixelData);
             }
 
@@ -181,7 +191,8 @@ namespace Brickles3k
                 // Convert the Depth Frame
                 // Create a texture and assign the realigned pixels
                 //
-                depthVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, depthVideoFrame.Width, depthVideoFrame.Height);
+                depthVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, depthVideoFrame.Width,
+                    depthVideoFrame.Height);
                 depthVideo.SetData(ConvertDepthFrame(pixelData, kinect.DepthStream));
             }
 
@@ -220,14 +231,12 @@ namespace Brickles3k
             {
                 foreach (Joint joint in skeleton.Joints)
                 {
-                    var position = new Vector2((((0.5f * joint.Position.X) + 0.5f) * (resolution.X)),
-                        (((-0.5f * joint.Position.Y) + 0.5f) * (resolution.Y)));
+                    var position = new Vector2((((0.5f*joint.Position.X) + 0.5f)*(resolution.X)),
+                        (((-0.5f*joint.Position.Y) + 0.5f)*(resolution.Y)));
                     Joint rightHand = skeleton.Joints[JointType.HandRight];
-                    Game1.game.handPosition = new Vector2(((((0.5f * rightHand.Position.X) + 0.5f) * (resolution.X)) - Game1.game.hand.Width / 2),
-                        ((((-0.5f * rightHand.Position.Y) + 0.5f) * (resolution.Y))) - Game1.game.hand.Height / 2);
-                    Game1.game.easterEggPosition =
-                        new Vector3(((((0.5f * rightHand.Position.X) + 0.5f) * (resolution.X)) - Game1.game.hand.Width / 2),
-                            ((((-0.5f * rightHand.Position.Y) + 0.5f) * (resolution.Y))) - Game1.game.hand.Height / 2, 0f);
+                    Game1.game.handPosition =
+                        new Vector2(((((0.5f*rightHand.Position.X) + 0.5f)*(resolution.X)) - Game1.game.hand.Width/2),
+                            ((((-0.5f*rightHand.Position.Y) + 0.5f)*(resolution.Y))) - Game1.game.hand.Height/2);
                     spriteBatch.Draw(img,
                         new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), 10, 10), Color.Red);
                 }
@@ -238,7 +247,7 @@ namespace Brickles3k
         {
             int RedIndex = 0, GreenIndex = 1, BlueIndex = 2, AlphaIndex = 3;
 
-            var depthFrame32 = new byte[depthStream.FrameWidth * depthStream.FrameHeight * 4];
+            var depthFrame32 = new byte[depthStream.FrameWidth*depthStream.FrameHeight*4];
 
             for (int i16 = 0, i32 = 0; i16 < depthFrame.Length && i32 < depthFrame32.Length; i16++, i32 += 4)
             {
@@ -247,7 +256,7 @@ namespace Brickles3k
 
                 // transform 13-bit depth information into an 8-bit intensity appropriate
                 // for display (we disregard information in most significant bit)
-                var intensity = (byte)(~(realDepth >> 4));
+                var intensity = (byte) (~(realDepth >> 4));
 
                 depthFrame32[i32 + RedIndex] = intensity;
                 depthFrame32[i32 + GreenIndex] = intensity;
@@ -258,5 +267,22 @@ namespace Brickles3k
             return depthFrame32;
         }
 
+        public virtual void Draw(GameTime gameTime)
+        {
+            if (kinected)
+            {
+                Game1.game.spriteBatch.Begin();
+
+                /*spriteBatch.Draw(colourVideo,
+                    new Rectangle(0, 0, GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height),
+                    Color.White); */
+                //spriteBatch.Draw(depthVideo, new Rectangle(0,0,screenWidth,240), Color.White);
+                Game1.game.spriteBatch.Draw(hand, Game1.game.handPosition, Color.White);
+                DrawSkeleton(Game1.game.spriteBatch,
+                    new Vector2(Game1.game.graphics.PreferredBackBufferWidth,
+                        Game1.game.graphics.PreferredBackBufferHeight), joint);
+                Game1.game.spriteBatch.End();
+            }
+        }
     }
 }

@@ -41,6 +41,7 @@
   <ItemGroup>
     <None Include="Maps\testmap.csv">
       <Name>testmap</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Models\brick1.fbx">
       <Name>brick1</Name>
@@ -82,19 +83,14 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\player.fbx">
-      <Name>player</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="hand.png">
+    <Compile Include="Sprites\hand.png">
       <Name>hand</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="joint.png">
+    <Compile Include="Sprites\joint.png">
       <Name>joint</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

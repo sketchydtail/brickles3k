@@ -1,36 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using System.IO;
-using System.Collections.Generic;
 
-namespace Brickles3k
+namespace Brickles
 {
-    public class Brick
+    public class Brick : GameObject
     {
-        public Vector3 Position;    //the bricks game position, modified from csv file
-        public Model Model;         //bricks model file, used if different types of bricks are needed
-        public Matrix Transform;
-        public Vector3 GridPos;     //the value read from csv
         public Vector3 Colour;
+        public Vector3 GridPos; //the value read from csv
 
         public Brick(Vector3 gridPos, float brickSize)
         {
             GridPos = gridPos;
-            
+
+            Position = new Vector3(GridPos.X*brickSize*Game1.scaleRatio, GridPos.Y*brickSize*Game1.scaleRatio,
+                GridPos.Z*brickSize*Game1.scaleRatio);
+
+            Transform = Matrix.CreateScale(Game1.scaleRatio, Game1.scaleRatio, Game1.scaleRatio)*
+                        Matrix.CreateTranslation(Position);
+
+            var rand = new Random();
+            Colour = new Vector3((float) rand.NextDouble(), (float) rand.NextDouble(),
+                (float) rand.NextDouble());
+
+            Model = Content.Load<Model>("Models/brick_square");
         }
 
         public virtual void Draw(GameTime gameTime)
         {
-            
         }
     }
 }

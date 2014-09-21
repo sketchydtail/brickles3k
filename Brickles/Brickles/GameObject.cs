@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Brickles3k
+namespace Brickles
 {
-    class GameObject
+    public class GameObject : Game
     {
-        public Matrix Transform;
         public Model Model;
+        public Vector3 Position;
+        public Matrix Transform;
     }
 }
