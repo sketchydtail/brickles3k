@@ -24,10 +24,7 @@ namespace Brickles
                 (float) rand.NextDouble());
 
             Model = Game1.game.Content.Load<Model>("Models/brick_square");
-        }
-
-        public virtual void Draw(GameTime gameTime)
-        {
+            LocalTransforms = new Matrix[Model.Bones.Count];
         }
     }
 }

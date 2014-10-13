@@ -22,8 +22,8 @@ namespace Brickles
         public Court Court;
         private LoadLevel Level;
         public Player Player;
-        private Matrix ProjectionMatrix;
-        private Matrix ViewMatrix;
+        public static Matrix ProjectionMatrix;
+        public static Matrix ViewMatrix;
         private KinectManager _kinectMan;
 
         //private Model PaddleModel;
@@ -31,7 +31,7 @@ namespace Brickles
 
         public Model brickModel;
         private int camAngle = 0;
-        private Vector3 cameraUpVector;
+        private Vector3 cameraUpVector = Vector3.Up;
         public Model courtModel;
 
         public Boolean debugging = true;
@@ -65,8 +65,8 @@ namespace Brickles
             graphics.ApplyChanges();
 
             ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
-            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.8f, GraphicsDevice.Viewport.AspectRatio, 10f,
-                100000f);
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.8f, GraphicsDevice.Viewport.AspectRatio, 1f,
+                10000f);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             base.Initialize();
@@ -81,7 +81,6 @@ namespace Brickles
             Player = new Player();
             Level = new LoadLevel("brixel_sphere");
 
-            //postComplementShader = Content.Load<Effect>("Content/post-complement-shader");
         }
 
         protected override void UnloadContent()
@@ -96,7 +95,7 @@ namespace Brickles
                 ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraTarget, cameraUpVector);
+            
             base.Update(gameTime);
         }
 
@@ -111,7 +110,7 @@ namespace Brickles
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Court.Draw(gameTime);
+            //Court.Draw(gameTime);
 
             foreach (Brick brick in Bricks)
             {

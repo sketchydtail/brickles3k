@@ -64,7 +64,7 @@ namespace Brickles
                 BoundingSphere bs = mesh.BoundingSphere;
                 brickSize = bs.Radius;
             }
-            int brickNumber = 0;
+            //int brickNumber = 0;
 
 
             foreach (Vector3 brick in BrickList)
@@ -77,7 +77,7 @@ namespace Brickles
                 }
             }
             Console.WriteLine("Brick processing complete!");
-            Console.WriteLine(" Created " + brickNumber + " brix");
+            Console.WriteLine(" Created " + Game1.game.Bricks.Count + " brix");
         }
 
 

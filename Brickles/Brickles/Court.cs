@@ -12,11 +12,9 @@ namespace Brickles
             Transform = Matrix.CreateScale(Game1.scaleRatio*6, Game1.scaleRatio*6, Game1.scaleRatio*12)*
                         Matrix.CreateRotationX((float) Math.PI)*Matrix.CreateTranslation(Position);
             Model = Game1.game.Content.Load<Model>("Models/court_seperated_v01");
+            LocalTransforms = new Matrix[Model.Bones.Count];
         }
 
-        public virtual void Draw(GameTime gameTime)
-        {
-        }
 
         /*
             foreach (ModelMesh m in courtModel.Meshes)
