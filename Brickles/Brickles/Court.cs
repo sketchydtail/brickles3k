@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,13 +7,15 @@ namespace Brickles
 {
     public class Court : GameObject
     {
+        public LinkedList<BoundingBox> bboxes = new LinkedList<BoundingBox>(); 
         public Court()
         {
-            Position = new Vector3(0, 400, -500); //save modified position
-            Transform = Matrix.CreateScale(Game1.scaleRatio*6, Game1.scaleRatio*6, Game1.scaleRatio*12)*
+            Position = new Vector3(0, 0, 0); //save modified position
+            Transform = Matrix.CreateScale(Game1.scaleRatio, Game1.scaleRatio, Game1.scaleRatio)*
                         Matrix.CreateRotationX((float) Math.PI)*Matrix.CreateTranslation(Position);
-            Model = Game1.game.Content.Load<Model>("Models/court_seperated_v01");
+            Model = Game1.game.Content.Load<Model>("Models/Court");
             LocalTransforms = new Matrix[Model.Bones.Count];
+
         }
 
 

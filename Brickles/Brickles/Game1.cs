@@ -13,12 +13,13 @@ namespace Brickles
     /// </summary>
     public class Game1 : Game
     {
-        public const float scaleRatio = 30f; //scale everything by this much
+        public const float scaleRatio = 1f; //scale everything by this much
         public static Game1 game;
 
-        private readonly Vector3 cameraPosition = new Vector3(0, 100, 2000f);
+        private readonly Vector3 cameraPosition = new Vector3(0, 0, 3000f);
         private readonly Vector3 cameraTarget = new Vector3(0f, 0f, 0f);
         public LinkedList<Brick> Bricks = new LinkedList<Brick>();
+        public LinkedList<Ball> Balls = new LinkedList<Ball>();         //list of balls for multiball compatibility
         public Court Court;
         private LoadLevel Level;
         public Player Player;
@@ -65,8 +66,8 @@ namespace Brickles
             graphics.ApplyChanges();
 
             ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
-            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.8f, GraphicsDevice.Viewport.AspectRatio, 1f,
-                10000f);
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.9f, GraphicsDevice.Viewport.AspectRatio, 0.1f,
+                5000f);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             base.Initialize();
@@ -75,11 +76,14 @@ namespace Brickles
 
         protected override void LoadContent()
         {
-            brickModel = Content.Load<Model>("Models/brick_square"); //need to load model here too to get measurements
+            AssetManager.LoadModels();
+            brickModel = Content.Load<Model>("Models/A1_Brick"); //need to load model here too to get measurements
             _kinectMan = new KinectManager();
             Court = new Court();
             Player = new Player();
             Level = new LoadLevel("brixel_sphere");
+            Balls.AddFirst(new Ball());
+
 
         }
 
@@ -95,6 +99,11 @@ namespace Brickles
                 ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
+            foreach (Ball b in Balls)
+            {
+                b.Update(gameTime);
+            }
             
             base.Update(gameTime);
         }
@@ -106,18 +115,41 @@ namespace Brickles
             Player.Update(currentState);
         }
 
+        private Ball.CollisionType CheckCollision(BoundingSphere sphere)
+        {
+            foreach (Brick b in Bricks)
+            {
+                if (b.bounding.Contains(sphere) != ContainmentType.Disjoint)
+                    return Ball.CollisionType.Brick;
+            }
+
+            foreach (BoundingBox box in Court.bboxes)
+            if (box.Contains(sphere) != ContainmentType.Contains)
+                return Ball.CollisionType.Wall;
+
+            return Ball.CollisionType.None;
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //Court.Draw(gameTime);
-
+                Court.Draw(gameTime);
+            
             foreach (Brick brick in Bricks)
             {
                 brick.Draw(gameTime);
             }
+            
+            foreach (Ball ball in Balls)
+            {
+                ball.Draw(gameTime);
+            }
+            
 
             _kinectMan.Draw(gameTime);
+
+
 
             base.Draw(gameTime);
         }

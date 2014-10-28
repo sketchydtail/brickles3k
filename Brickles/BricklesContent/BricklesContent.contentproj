@@ -51,18 +51,63 @@
       <Name>testmap</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Models\brick1.fbx">
-      <Name>brick1</Name>
+    <Compile Include="Models\court_seperated_v01.fbx">
+      <Name>court_seperated_v01</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\brick1_old.fbx">
-      <Name>brick1_old</Name>
+    <Compile Include="Models\A1_Brick.fbx">
+      <Name>A1_Brick</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\brickle_sphere_template_v001.fbx">
-      <Name>brickle_sphere_template_v001</Name>
+    <Compile Include="Models\A2_Brick.fbx">
+      <Name>A2_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\A3_Brick.fbx">
+      <Name>A3_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\B1_Brick.fbx">
+      <Name>B1_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\B2_Brick.fbx">
+      <Name>B2_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\B3_Brick.fbx">
+      <Name>B3_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\C1_Brick.fbx">
+      <Name>C1_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\C2_Brick.fbx">
+      <Name>C2_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\C3_Brick.fbx">
+      <Name>C3_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\D1_Brick.fbx">
+      <Name>D1_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\D2_Brick.fbx">
+      <Name>D2_Brick</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
@@ -71,23 +116,13 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\court.fbx">
-      <Name>court</Name>
+    <Compile Include="Models\Court.fbx">
+      <Name>Court</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\court_flipped.fbx">
-      <Name>court_flipped</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\court_seperated_v01.fbx">
-      <Name>court_seperated_v01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\court_v002.fbx">
-      <Name>court_v002</Name>
+    <Compile Include="Models\Ball.fbx">
+      <Name>Ball</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
@@ -100,6 +135,13 @@
     </Compile>
     <Compile Include="Sprites\joint.png">
       <Name>joint</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Brick_TextureAtlas.png">
+      <Name>Brick_TextureAtlas</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
