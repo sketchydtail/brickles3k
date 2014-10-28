@@ -36,6 +36,7 @@ namespace Brickles
         public static Matrix ProjectionMatrix;
         public static Matrix ViewMatrix;
         private KinectManager _kinectMan;
+        public SpriteFont ScoreFont;
 
         //private Model PaddleModel;
 
@@ -95,6 +96,8 @@ namespace Brickles
             Player = new Player();
             Level = new LoadLevel("brixel_sphere");
             Balls.AddFirst(new Ball());
+
+            ScoreFont = Content.Load<SpriteFont>("Fonts/Scorefont");
 
 
         }
@@ -200,7 +203,8 @@ namespace Brickles
 
             _kinectMan.Draw(gameTime);
 
-
+            Text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);
+            Text.DrawText(ScoreFont, "Score: " + Player.Score, TextTypes.Score);
 
             base.Draw(gameTime);
         }

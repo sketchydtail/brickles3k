@@ -9,6 +9,9 @@ namespace Brickles
         private const float VelocityScale = 30.0f;
         public Model Model;
 
+        public int Health = 100;
+        public int Score = 0;
+
         //Position of the model in world space
         public Vector3 Position = Vector3.Zero;
 

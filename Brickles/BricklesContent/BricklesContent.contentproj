@@ -39,6 +39,15 @@
     <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Fonts\Mage 1999.ttf">
+      <Name>Mage 1999</Name>
+    </None>
+    <Compile Include="Fonts\Scorefont.spritefont">
+      <Name>Scorefont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Compile>
     <None Include="Maps\brixel_sphere.csv">
       <Name>brixel_sphere</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

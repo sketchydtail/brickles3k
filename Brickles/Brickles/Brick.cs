@@ -54,10 +54,12 @@ namespace Brickles
             if (Type == BrickType.Treasure)
             {
                 Type = BrickType.Dead;
+                Game1.game.Player.Score += 10;
             }
             else if (Type == BrickType.Normal)
             {
                 Type = BrickType.Dead;
+                Game1.game.Player.Score += 5;
             }
         }
 
