@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -78,6 +79,55 @@ namespace Brickles
             }
             Console.WriteLine("Brick processing complete!");
             Console.WriteLine(" Created " + Game1.game.Bricks.Count + " brix");
+            GenerateSpecialBricks(Game1.game.difficulty);
+        }
+
+        private void GenerateSpecialBricks(Difficulty dif)
+        {
+            float specialPercent = 0;         //overal percentage of special bricks
+            float treasurePercent = 0;
+            int totalBricks = Game1.game.Bricks.Count;
+            switch (dif)
+            {
+                case Difficulty.Tutorial:
+                    specialPercent = 0.15f;
+                    treasurePercent = 1f;
+                    break;                      //tutorial gets 15% special, all of which are treasure
+                case Difficulty.Easy:
+                    specialPercent = 0.1f;      //easy gets 10% special, 80% of which are treasure
+                    treasurePercent = 0.8f;
+                    break;
+                case Difficulty.Medium:         //medium gets 5% specials, 50% of which are treasure
+                    specialPercent = 0.05f;
+                    treasurePercent = 0.5f;
+                    break;
+                case Difficulty.Hard:
+                    specialPercent = 0.1f;      //hard gets 10% specials, 20% of which are treasure
+                    treasurePercent = 0.2f;
+                    break;
+                case Difficulty.Impossible:     //impossible gets 15% special, all of which are unbreakable
+                    specialPercent = 0.15f;
+                    treasurePercent = 0f;
+                    break;
+            }
+
+            int specialCount = (int)Math.Round(totalBricks*specialPercent);
+            int treasureCount = (int) Math.Round(specialCount*treasurePercent);
+            int unbreakableCount = specialCount - treasureCount;
+
+
+            Random rand = new Random();
+            for (int i = unbreakableCount; i > 0; i--)      //foreach unbreakable brick
+            {
+                
+                int b = rand.Next(totalBricks - 1);         //choose a random brick
+                Game1.game.Bricks.ElementAt(b).setBrickType(BrickType.Unbreakable);     //set to unbreakable
+            }
+            for (int t = treasureCount; t > 0; t--)         //bug: treasure bricks can overwrite unbreakable bricks... not a huge issue
+            {
+                int b = rand.Next(totalBricks - 1);         //choose a random brick
+                Game1.game.Bricks.ElementAt(b).setBrickType(BrickType.Treasure);     //set to treasure
+            }
         }
 
 

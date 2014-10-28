@@ -59,10 +59,10 @@ namespace Brickles
 
         }
 
-        public void Bounce()
+        public void Bounce()        //this method is called when the ball collides with a brick, its spozed to make the ball bounce off, please fix
         {
 
-            //fix this daniel
+            //fix this
             float angle = MathHelper.ToDegrees(RotateV.Y);
             double resultAngle = Math.Sin(angle);
             Console.WriteLine("Bounce angle: " + angle  + " result: " + -angle);

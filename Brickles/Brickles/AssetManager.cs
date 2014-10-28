@@ -10,6 +10,8 @@ namespace Brickles
     public static class AssetManager
     {
         public static Model[] brickModels = new Model[11];
+        public static Model treasureBrickModel;
+        public static Model unbreakableBrickModel;
 
         public static void LoadModels()
         {
@@ -24,14 +26,33 @@ namespace Brickles
             brickModels[8] = Game1.game.Content.Load<Model>("Models/C3_Brick");
             brickModels[9] = Game1.game.Content.Load<Model>("Models/D1_Brick");
             brickModels[10] = Game1.game.Content.Load<Model>("Models/D2_Brick");
+
+            treasureBrickModel = Game1.game.Content.Load<Model>("Models/Chest_Brick");
+            unbreakableBrickModel = Game1.game.Content.Load<Model>("Models/Unbreakable_Brick");
+
         }
 
-        public static Model getRandomBrickModel()
+        private static Model getRandomBrickModel()
         {
             Random rand = new Random();
             int randValue = rand.Next(0, 10);
 
             return brickModels[randValue];
+        }
+
+        public static Model getBrickModel(BrickType type)
+        {
+            if (type == BrickType.Treasure)
+            {
+                return treasureBrickModel;
+            }
+
+            if (type == BrickType.Unbreakable)
+            {
+                return unbreakableBrickModel;
+            }
+            
+            return getRandomBrickModel();
         }
 
         public static Model getBallModel(balls b)

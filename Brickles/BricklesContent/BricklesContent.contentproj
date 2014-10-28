@@ -51,11 +51,6 @@
       <Name>testmap</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Models\court_seperated_v01.fbx">
-      <Name>court_seperated_v01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\A1_Brick.fbx">
       <Name>A1_Brick</Name>
       <Importer>FbxImporter</Importer>
@@ -111,11 +106,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\brick_square.fbx">
-      <Name>brick_square</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\Court.fbx">
       <Name>Court</Name>
       <Importer>FbxImporter</Importer>
@@ -123,6 +113,16 @@
     </Compile>
     <Compile Include="Models\Ball.fbx">
       <Name>Ball</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Chest_Brick.fbx">
+      <Name>Chest_Brick</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Unbreakable_Brick.fbx">
+      <Name>Unbreakable_Brick</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>

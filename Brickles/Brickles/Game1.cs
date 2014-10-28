@@ -11,6 +11,16 @@ namespace Brickles
     ///     All code  created by the wonderfully talented Sketchy.D.Tail (AKA. Julian Hunt) - Copyright September 2014
     ///     Any resemblance to other code is purely concidental.
     /// </summary>
+    /// 
+
+    public enum Difficulty
+    {
+        Tutorial,
+        Easy,
+        Medium,
+        Hard,
+        Impossible
+    };
     public class Game1 : Game
     {
         public const float scaleRatio = 1f; //scale everything by this much
@@ -41,6 +51,8 @@ namespace Brickles
         public Texture2D hand;
         public Vector2 handPosition;
         private Texture2D jointTexture;
+
+        public Difficulty difficulty = Difficulty.Medium;
 
 
         private Vector3 nextVector = Vector3.Forward;
@@ -108,10 +120,14 @@ namespace Brickles
 
                 foreach (Brick brick in Bricks)
                 {
-                    if (IsCollision(b.Model, b.World, brick.Model, brick.World))
+                    if (brick.Type != BrickType.Dead)
                     {
-                        Console.WriteLine("Collision: " + b + " and " + brick);
-                        b.Bounce();
+                        if (IsCollision(b.Model, b.World, brick.Model, brick.World))
+                        {
+                            Console.WriteLine("Collision: " + b + " and " + brick);
+                            b.Bounce();
+                            brick.hitBrick();
+                        }
                     }
                 }
 
@@ -170,7 +186,10 @@ namespace Brickles
             
             foreach (Brick brick in Bricks)
             {
-                brick.Draw(gameTime);
+                if (brick.Type != BrickType.Dead)
+                {
+                    brick.Draw(gameTime);
+                }
             }
             
             foreach (Ball ball in Balls)
