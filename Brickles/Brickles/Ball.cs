@@ -19,6 +19,7 @@ namespace Brickles
         };
         private float bounce = 0.9f;    //ball bounces back multiplied by this much
         private float speed = 15f;
+        public BoundingSphere bounding;
 
         public Ball()
         {
@@ -26,7 +27,7 @@ namespace Brickles
 
             Position = new Vector3(0, 0, 2900f); //save modified position
             LocalTransforms = new Matrix[Model.Bones.Count];
-            RotateV = new Vector3(0, MathHelper.ToRadians(0), 0);
+            RotateV = new Vector3(0, MathHelper.ToRadians(3), 0);
         }
 
         public void changeBall(balls b)
@@ -49,12 +50,26 @@ namespace Brickles
 
         public virtual void Update(GameTime gameTime)
         {
+            
             Rotation = Matrix.CreateFromYawPitchRoll(RotateV.Y, RotateV.X, 0);
 
             Vector3 translation = Vector3.Transform(Vector3.Forward * speed, Rotation);
             Position += translation;
             Transform =  Matrix.CreateTranslation(Position);
 
+        }
+
+        public void Bounce()
+        {
+
+            //fix this daniel
+            float angle = MathHelper.ToDegrees(RotateV.Y);
+            double resultAngle = Math.Sin(angle);
+            Console.WriteLine("Bounce angle: " + angle  + " result: " + -angle);
+            RotateV = new Vector3(-RotateV.X, RotateV.Y, -RotateV.Z);
+
+           // RotateV.X = oldPos.X + speed * (float)Math.Cos(direction);
+           // position.Y = oldPos.Y + speed * (float)Math.Sin(direction);
         }
          
 

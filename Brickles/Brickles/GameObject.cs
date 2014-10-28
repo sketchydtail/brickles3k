@@ -14,6 +14,7 @@ namespace Brickles
         public VertexPositionTexture[] tex;
         public Matrix Rotation;
         public Vector3 RotateV;
+        public Matrix World;
 
 
         public virtual void Draw(GameTime gameTime)

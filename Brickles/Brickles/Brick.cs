@@ -31,9 +31,11 @@ namespace Brickles
             LocalTransforms = new Matrix[Model.Bones.Count];
 
             Vector3[] brickPoints = new Vector3[2];
-            brickPoints[0] = new Vector3(Position.X, Position.Y, Position.Z);
-            brickPoints[1] = new Vector3(Position.X + brickSize, Position.Y + brickSize, Position.Z + brickSize);
+            brickPoints[0] = new Vector3(Position.X - (brickSize/2), Position.Y - (brickSize/2), Position.Z - (brickSize/2));
+            brickPoints[1] = new Vector3(Position.X + (brickSize/2), Position.Y + (brickSize/2), Position.Z + (brickSize/2));
             bounding = BoundingBox.CreateFromPoints(brickPoints);
+
+            World = Matrix.CreateTranslation(Position);
 
         }
     }

@@ -72,7 +72,7 @@ namespace Brickles
                 if (brick != null)
                 {
                     //apply scaling and transform then add it to the list - 'temp' is just used for debugging purposes
-                    Console.WriteLine("Z:" + brick.Z);
+                    //Console.WriteLine("Z:" + brick.Z);
                     Game1.game.Bricks.AddLast(new Brick(brick, brickSize)); //create a new brick in dictionary
                 }
             }

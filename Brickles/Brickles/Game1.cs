@@ -103,8 +103,20 @@ namespace Brickles
             foreach (Ball b in Balls)
             {
                 b.Update(gameTime);
+                b.World = Matrix.CreateTranslation(b.Position);
+
+
+                foreach (Brick brick in Bricks)
+                {
+                    if (IsCollision(b.Model, b.World, brick.Model, brick.World))
+                    {
+                        Console.WriteLine("Collision: " + b + " and " + brick);
+                        b.Bounce();
+                    }
+                }
+
             }
-            
+
             base.Update(gameTime);
         }
 
@@ -130,9 +142,29 @@ namespace Brickles
             return Ball.CollisionType.None;
         }
 
+        private bool IsCollision(Model model1, Matrix world1, Model model2, Matrix world2)
+        {
+            for (int meshIndex1 = 0; meshIndex1 < model1.Meshes.Count; meshIndex1++)
+            {
+                BoundingSphere sphere1 = model1.Meshes[meshIndex1].BoundingSphere;
+                sphere1 = sphere1.Transform(world1);
+
+                for (int meshIndex2 = 0; meshIndex2 < model2.Meshes.Count; meshIndex2++)
+                {
+                    BoundingSphere sphere2 = model2.Meshes[meshIndex2].BoundingSphere;
+                    sphere2 = sphere2.Transform(world2);
+
+                    if (sphere1.Intersects(sphere2))
+                        return true;
+                }
+            }
+            return false;
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
+            this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
                 Court.Draw(gameTime);
             
