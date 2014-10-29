@@ -69,8 +69,14 @@ namespace Brickles
             Console.WriteLine("Bounce angle: " + angle  + " result: " + -angle);
             RotateV = new Vector3(-RotateV.X, RotateV.Y, -RotateV.Z);
 
-           // RotateV.X = oldPos.X + speed * (float)Math.Cos(direction);
-           // position.Y = oldPos.Y + speed * (float)Math.Sin(direction);
+            //ball bounces randomly, including going back to the player and to other bricks
+            //random.next() can be removed, so the ball will bounce accordingly with the value of the $bounce variable
+            //it should hit the wall
+            Random random = new Random();
+            RotateV.X = Position.X * bounce * random.Next();
+            RotateV.Y = Position.Y * bounce * random.Next();
+            RotateV.Z = Position.Z * bounce * random.Next();
+
             scene.brickBounce.Play();
 
         }
