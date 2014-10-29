@@ -21,6 +21,14 @@ namespace Brickles
         Hard,
         Impossible
     };
+
+    public enum Controller
+    {
+        Keyboard,
+        Gamepad,
+        Kinect
+    };
+
     public class Game1 : Game
     {
         public const float scaleRatio = 1f; //scale everything by this much
@@ -49,11 +57,16 @@ namespace Brickles
         public Boolean debugging = true;
         public GraphicsDeviceManager graphics;
 
-        public Texture2D hand;
+        //public Texture2D hand;
         public Vector2 handPosition;
-        private Texture2D jointTexture;
+        //private Texture2D jointTexture;
+
+        public Model paddleModel;
+        public Matrix paddleTransform;
+        public Vector3 paddlePos;
 
         public Difficulty difficulty = Difficulty.Medium;
+        public Controller controller = Controller.Gamepad;
 
 
         private Vector3 nextVector = Vector3.Forward;
@@ -83,6 +96,9 @@ namespace Brickles
                 5000f);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            paddlePos = new Vector3(0, 0, 2400f);        //set paddle in middle of screen
+
             base.Initialize();
         }
 
@@ -96,6 +112,8 @@ namespace Brickles
             Player = new Player();
             Level = new LoadLevel("brixel_sphere");
             Balls.AddFirst(new Ball());
+
+            paddleModel = Content.Load<Model>("Models/Paddle");
 
             ScoreFont = Content.Load<SpriteFont>("Fonts/Scorefont");
 
@@ -120,6 +138,9 @@ namespace Brickles
                 b.Update(gameTime);
                 b.World = Matrix.CreateTranslation(b.Position);
 
+                UpdateInput();
+
+                UpdatePaddlePosition();
 
                 foreach (Brick brick in Bricks)
                 {
@@ -142,8 +163,35 @@ namespace Brickles
         protected void UpdateInput()
         {
             // Get the game pad state.
-            GamePadState currentState = GamePad.GetState(PlayerIndex.One);
-            Player.Update(currentState);
+            if (controller == Controller.Gamepad)
+            {
+
+                GamePadState currentState = GamePad.GetState(PlayerIndex.One);
+                Player.UpdateController(currentState);
+            }
+            else if (controller == Controller.Keyboard)
+            {
+                KeyboardState keystate = Keyboard.GetState();
+                Player.UpdateKeyboard(keystate);
+            }
+
+            if (paddlePos.X > GraphicsDevice.Viewport.Width/2)
+            {
+                paddlePos.X = GraphicsDevice.Viewport.Width/2;
+            }
+            else if (paddlePos.X < -GraphicsDevice.Viewport.Width/2)
+            {
+                paddlePos.X = -GraphicsDevice.Viewport.Width/2;
+            }
+
+            if (paddlePos.Y > GraphicsDevice.Viewport.Height/2)
+            {
+                paddlePos.Y = GraphicsDevice.Viewport.Height/2;
+            }
+            else if (paddlePos.Y < -GraphicsDevice.Viewport.Height/2)
+            {
+                paddlePos.Y = -GraphicsDevice.Viewport.Height/2;
+            }
         }
 
         private Ball.CollisionType CheckCollision(BoundingSphere sphere)
@@ -180,10 +228,16 @@ namespace Brickles
             return false;
         }
 
+        private void UpdatePaddlePosition()
+        {
+            //paddlePos = new Vector3(handPosition.X, handPosition.Y, 1000f);
+            paddleTransform = Matrix.CreateTranslation(paddlePos);
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-            this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;         //turn off texture blurring for nice sharp retro look
 
                 Court.Draw(gameTime);
             
@@ -202,6 +256,10 @@ namespace Brickles
             
 
             _kinectMan.Draw(gameTime);
+
+
+            Console.WriteLine("Paddlepos: " + paddlePos);
+            paddleModel.Draw(paddleTransform, ViewMatrix, ProjectionMatrix);
 
             Text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);
             Text.DrawText(ScoreFont, "Score: " + Player.Score, TextTypes.Score);

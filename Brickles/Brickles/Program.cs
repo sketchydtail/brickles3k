@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 namespace Brickles
 {
 #if WINDOWS || XBOX
@@ -8,10 +10,13 @@ namespace Brickles
         /// </summary>
         private static void Main(string[] args)
         {
+            
             using (var game = new Game1())
             {
                 game.Run();
             }
+             
+           // StateLoader.Begin();
         }
     }
 #endif

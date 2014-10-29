@@ -97,6 +97,7 @@ namespace Brickles
             if (kinect.Status == KinectStatus.Connected)
             {
                 InitializeKinect();
+
             }
         }
 
@@ -234,9 +235,17 @@ namespace Brickles
                     var position = new Vector2((((0.5f*joint.Position.X) + 0.5f)*(resolution.X)),
                         (((-0.5f*joint.Position.Y) + 0.5f)*(resolution.Y)));
                     Joint rightHand = skeleton.Joints[JointType.HandRight];
-                    Game1.game.handPosition =
-                        new Vector2(((((0.5f*rightHand.Position.X) + 0.5f)*(resolution.X)) - Game1.game.hand.Width/2),
-                            ((((-0.5f*rightHand.Position.Y) + 0.5f)*(resolution.Y))) - Game1.game.hand.Height/2);
+                    //Game1.game.handPosition =
+                       // new Vector2(((((0.5f*rightHand.Position.X) + 0.5f)*(resolution.X)) - hand.Width/2),
+                       //     ((((-0.5f*rightHand.Position.Y) + 0.5f)*(resolution.Y))) - hand.Height/2);
+
+
+                        Game1.game.paddlePos = new Vector3(rightHand.Position.X*(resolution.X/2),
+                            rightHand.Position.Y*(resolution.Y/2), 2400f);
+                    
+
+
+
                     spriteBatch.Draw(img,
                         new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), 10, 10), Color.Red);
                 }
@@ -277,7 +286,8 @@ namespace Brickles
                     new Rectangle(0, 0, GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height),
                     Color.White); */
                 //spriteBatch.Draw(depthVideo, new Rectangle(0,0,screenWidth,240), Color.White);
-                Game1.game.spriteBatch.Draw(hand, Game1.game.handPosition, Color.White);
+               // Game1.game.spriteBatch.Draw(hand, Game1.game.handPosition, Color.White);
+
                 DrawSkeleton(Game1.game.spriteBatch,
                     new Vector2(Game1.game.graphics.PreferredBackBufferWidth,
                         Game1.game.graphics.PreferredBackBufferHeight), joint);
