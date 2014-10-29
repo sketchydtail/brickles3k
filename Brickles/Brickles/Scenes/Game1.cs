@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -29,13 +30,15 @@ namespace Brickles
         Kinect
     };
 
-    public class Game1 : Game
+    public class Game1 : Scene
     {
         public const float scaleRatio = 1f; //scale everything by this much
-        public static Game1 game;
 
         private readonly Vector3 cameraPosition = new Vector3(0, 0, 3000f);
         private readonly Vector3 cameraTarget = new Vector3(0f, 0f, 0f);
+
+        public Text text;
+
         public LinkedList<Brick> Bricks = new LinkedList<Brick>();
         public LinkedList<Ball> Balls = new LinkedList<Ball>();         //list of balls for multiball compatibility
         public Court Court;
@@ -43,11 +46,8 @@ namespace Brickles
         public Player Player;
         public static Matrix ProjectionMatrix;
         public static Matrix ViewMatrix;
-        private KinectManager _kinectMan;
+        public KinectManager _kinectMan;
         public SpriteFont ScoreFont;
-
-        //private Model PaddleModel;
-
 
         public Model brickModel;
         private int camAngle = 0;
@@ -55,15 +55,22 @@ namespace Brickles
         public Model courtModel;
 
         public Boolean debugging = true;
-        public GraphicsDeviceManager graphics;
-
-        //public Texture2D hand;
         public Vector2 handPosition;
-        //private Texture2D jointTexture;
 
         public Model paddleModel;
         public Matrix paddleTransform;
         public Vector3 paddlePos;
+
+
+        public SoundEffect brickBounce;
+        public SoundEffect laser;
+        public SoundEffect levelComplete;
+        public SoundEffect MenuNotify;
+        public SoundEffect Notify;
+        public SoundEffect Recycle;
+        public SoundEffect WallBounce;
+
+        
 
         public Difficulty difficulty = Difficulty.Medium;
         public Controller controller = Controller.Keyboard;
@@ -73,29 +80,24 @@ namespace Brickles
 
         //private Effect postComplementShader;
 
-        public SpriteBatch spriteBatch;
+        //public SpriteBatch spriteBatch;
 
-        public Game1()
+
+        public Game1(GameManager game) : base(game)
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            graphics.PreferMultiSampling = true; //enable multisampling / anti aliasing  
-            game = this;
+            this.game = game;
+            
         }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
-            //GraphicsDevice does not exist in the constructor, so the game must be resized here.
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width; //set game width to screen width
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height; //set game height to screen height
-            //graphics.IsFullScreen = true; // make it fullscreen
-            graphics.ApplyChanges();
+            text = new Text(this);
 
             ViewMatrix = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
-            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.9f, GraphicsDevice.Viewport.AspectRatio, 0.1f,
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.9f, game.GraphicsDevice.Viewport.AspectRatio, 0.1f,
                 5000f);
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            
 
             paddlePos = new Vector3(0, 0, 2400f);        //set paddle in middle of screen
 
@@ -105,17 +107,23 @@ namespace Brickles
 
         protected override void LoadContent()
         {
-            AssetManager.LoadModels();
-            brickModel = Content.Load<Model>("Models/A1_Brick"); //need to load model here too to get measurements
-            _kinectMan = new KinectManager();
-            Court = new Court();
-            Player = new Player();
-            Level = new LoadLevel("brixel_sphere");
-            Balls.AddFirst(new Ball());
+            game.assetManager.LoadModels();
+            brickModel = game.Content.Load<Model>("Models/A1_Brick"); //need to load model here too to get measurements
+            _kinectMan = new KinectManager(this);
+            Court = new Court(this);
+            Player = new Player(this);
+            Level = new LoadLevel("brixel_sphere", this);
+            Balls.AddFirst(new Ball(this));
+            paddleModel = game.Content.Load<Model>("Models/Paddle");
+            ScoreFont = game.Content.Load<SpriteFont>("Fonts/Scorefont");
 
-            paddleModel = Content.Load<Model>("Models/Paddle");
-
-            ScoreFont = Content.Load<SpriteFont>("Fonts/Scorefont");
+            brickBounce = game.Content.Load<SoundEffect>("Sounds/brick_bounce");
+            laser = game.Content.Load<SoundEffect>("Sounds/laser");
+            levelComplete = game.Content.Load<SoundEffect>("Sounds/level_complete");
+            MenuNotify = game.Content.Load<SoundEffect>("Sounds/menu_Selection");
+            Notify = game.Content.Load<SoundEffect>("Sounds/notify");
+            Recycle = game.Content.Load<SoundEffect>("Sounds/recycle");
+            WallBounce = game.Content.Load<SoundEffect>("Sounds/wall_bounce");
 
 
         }
@@ -124,13 +132,13 @@ namespace Brickles
         {
         }
 
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             var timeDelta = (float) gameTime.ElapsedGameTime.TotalSeconds;
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back ==
                 ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+                game.Exit();
 
 
             foreach (Ball b in Balls)
@@ -175,23 +183,6 @@ namespace Brickles
                 Player.UpdateKeyboard(keystate);
             }
 
-            if (paddlePos.X > GraphicsDevice.Viewport.Width/2)
-            {
-                paddlePos.X = GraphicsDevice.Viewport.Width/2;
-            }
-            else if (paddlePos.X < -GraphicsDevice.Viewport.Width/2)
-            {
-                paddlePos.X = -GraphicsDevice.Viewport.Width/2;
-            }
-
-            if (paddlePos.Y > GraphicsDevice.Viewport.Height/2)
-            {
-                paddlePos.Y = GraphicsDevice.Viewport.Height/2;
-            }
-            else if (paddlePos.Y < -GraphicsDevice.Viewport.Height/2)
-            {
-                paddlePos.Y = -GraphicsDevice.Viewport.Height/2;
-            }
         }
 
         private Ball.CollisionType CheckCollision(BoundingSphere sphere)
@@ -234,10 +225,10 @@ namespace Brickles
             paddleTransform = Matrix.CreateTranslation(paddlePos);
         }
 
-        protected override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-            this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;         //turn off texture blurring for nice sharp retro look
+            game.GraphicsDevice.Clear(Color.CornflowerBlue);
+            game.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;         //turn off texture blurring for nice sharp retro look
 
                 Court.Draw(gameTime);
             
@@ -261,8 +252,8 @@ namespace Brickles
             //Console.WriteLine("Paddlepos: " + paddlePos);
             paddleModel.Draw(paddleTransform, ViewMatrix, ProjectionMatrix);
 
-            Text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);
-            Text.DrawText(ScoreFont, "Score: " + Player.Score, TextTypes.Score);
+            text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);
+            text.DrawText(ScoreFont, "Score: " + Player.Score, TextTypes.Score);
 
             base.Draw(gameTime);
         }

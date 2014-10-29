@@ -21,9 +21,10 @@ namespace Brickles
         private float speed = 15f;
         public BoundingSphere bounding;
 
-        public Ball()
+        public Ball(Game1 scene) : base(scene)
         {
-            Model = AssetManager.getBallModel(balls.Normal);
+            this.scene = scene;
+            Model = scene.game.assetManager.getBallModel(balls.Normal);
 
             Position = new Vector3(0, 0, 2900f); //save modified position
             LocalTransforms = new Matrix[Model.Bones.Count];
@@ -32,7 +33,7 @@ namespace Brickles
 
         public void changeBall(balls b)
         {
-            Model = AssetManager.getBallModel(b);
+            Model = scene.game.assetManager.getBallModel(b);
 
             switch (b)
             {
@@ -70,6 +71,8 @@ namespace Brickles
 
            // RotateV.X = oldPos.X + speed * (float)Math.Cos(direction);
            // position.Y = oldPos.Y + speed * (float)Math.Sin(direction);
+            scene.brickBounce.Play();
+
         }
          
 

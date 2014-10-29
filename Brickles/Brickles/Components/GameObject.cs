@@ -5,8 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Brickles
 {
-    public class GameObject : Game
+    public class GameObject
     {
+        public Game1 scene;
         public Model Model;
         public Vector3 Position;
         public Matrix Transform;
@@ -15,7 +16,12 @@ namespace Brickles
         public Matrix Rotation;
         public Vector3 RotateV;
         public Matrix World;
+        
 
+        public GameObject(Game1 scene)
+        {
+            this.scene = scene;
+        }
 
         public virtual void Draw(GameTime gameTime)
         {

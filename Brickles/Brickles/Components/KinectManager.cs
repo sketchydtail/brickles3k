@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Brickles
 {
-    internal class KinectManager : Game
+    public class KinectManager
     {
         private readonly Texture2D hand;
         private readonly Texture2D joint;
-        private Game _game;
+        //private Game _game;
         public Texture2D colourVideo;
         public string connectedStatus = "Not connected";
         public Texture2D depthVideo;
@@ -19,16 +19,19 @@ namespace Brickles
         public Skeleton skeleton;
         public Skeleton[] skeletonData;
 
-        public KinectManager()
+        public Game1 scene;
+
+        public KinectManager(Scene s)
         {
+            this.scene = (Game1)s;
             try
             {
                 KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
                 DiscoverKinectSensor();
 
-                Debug.WriteLineIf(Game1.game.debugging, kinect.Status);
-                joint = Game1.game.Content.Load<Texture2D>("Sprites/joint");
-                hand = Game1.game.Content.Load<Texture2D>("Sprites/hand");
+                Debug.WriteLineIf(scene.debugging, kinect.Status);
+                joint = scene.game.Content.Load<Texture2D>("Sprites/joint");
+                hand = scene.game.Content.Load<Texture2D>("Sprites/hand");
             }
             catch (Exception e)
             {
@@ -110,9 +113,9 @@ namespace Brickles
             kinect.AllFramesReady += kinect_AllFramesReady;
 
 
-            colourVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, kinect.ColorStream.FrameWidth,
+            colourVideo = new Texture2D(scene.game.graphics.GraphicsDevice, kinect.ColorStream.FrameWidth,
                 kinect.ColorStream.FrameHeight);
-            depthVideo = new Texture2D(Game1.game.GraphicsDevice, kinect.DepthStream.FrameWidth,
+            depthVideo = new Texture2D(scene.game.GraphicsDevice, kinect.DepthStream.FrameWidth,
                 kinect.DepthStream.FrameHeight);
 
 
@@ -167,7 +170,7 @@ namespace Brickles
                 }
 
                 // Create a texture and assign the realigned pixels
-                colourVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, colorVideoFrame.Width,
+                colourVideo = new Texture2D(scene.game.graphics.GraphicsDevice, colorVideoFrame.Width,
                     colorVideoFrame.Height);
                 colourVideo.SetData(bgraPixelData);
             }
@@ -179,20 +182,20 @@ namespace Brickles
 
             if (depthVideoFrame != null)
             {
-                Debug.WriteLineIf(Game1.game.debugging, "Frame");
+                Debug.WriteLineIf(scene.debugging, "Frame");
                 //Create array for pixel data and copy it from the image frame
                 var pixelData = new short[depthVideoFrame.PixelDataLength];
                 depthVideoFrame.CopyPixelDataTo(pixelData);
 
                 for (int i = 0; i < 10; i++)
                 {
-                    Debug.WriteLineIf(Game1.game.debugging, pixelData[i]);
+                    Debug.WriteLineIf(scene.debugging, pixelData[i]);
                 }
 
                 // Convert the Depth Frame
                 // Create a texture and assign the realigned pixels
                 //
-                depthVideo = new Texture2D(Game1.game.graphics.GraphicsDevice, depthVideoFrame.Width,
+                depthVideo = new Texture2D(scene.game.graphics.GraphicsDevice, depthVideoFrame.Width,
                     depthVideoFrame.Height);
                 depthVideo.SetData(ConvertDepthFrame(pixelData, kinect.DepthStream));
             }
@@ -240,7 +243,7 @@ namespace Brickles
                        //     ((((-0.5f*rightHand.Position.Y) + 0.5f)*(resolution.Y))) - hand.Height/2);
 
 
-                        Game1.game.paddlePos = new Vector3(rightHand.Position.X*(resolution.X/2),
+                        scene.paddlePos = new Vector3(rightHand.Position.X*(resolution.X/2),
                             rightHand.Position.Y*(resolution.Y/2), 2400f);
                     
 
@@ -280,7 +283,7 @@ namespace Brickles
         {
             if (kinected)
             {
-                Game1.game.spriteBatch.Begin();
+                scene.game.spriteBatch.Begin();
 
                 /*spriteBatch.Draw(colourVideo,
                     new Rectangle(0, 0, GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height),
@@ -288,10 +291,10 @@ namespace Brickles
                 //spriteBatch.Draw(depthVideo, new Rectangle(0,0,screenWidth,240), Color.White);
                // Game1.game.spriteBatch.Draw(hand, Game1.game.handPosition, Color.White);
 
-                DrawSkeleton(Game1.game.spriteBatch,
-                    new Vector2(Game1.game.graphics.PreferredBackBufferWidth,
-                        Game1.game.graphics.PreferredBackBufferHeight), joint);
-                Game1.game.spriteBatch.End();
+                DrawSkeleton(scene.game.spriteBatch,
+                    new Vector2(scene.game.graphics.PreferredBackBufferWidth,
+                        scene.game.graphics.PreferredBackBufferHeight), joint);
+                scene.game.spriteBatch.End();
             }
         }
     }

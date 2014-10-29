@@ -20,12 +20,15 @@ namespace Brickles
         public Vector3 GridPos; //the value read from csv
         public BoundingBox bounding;
         public BrickType Type;
+       // public Game1 scene;
         
-        public Brick(Vector3 gridPos, float brickSize)
+
+        public Brick(Game1 scene, Vector3 gridPos, float brickSize) : base(scene)
         {
+            this.scene = scene;
             GridPos = gridPos;
             Type = BrickType.Normal;            //set brick type
-            Model = AssetManager.getBrickModel(Type);       //load normal brick model
+            Model = scene.game.assetManager.getBrickModel(Type);       //load normal brick model
 
             Position = new Vector3(GridPos.X*brickSize*Game1.scaleRatio, GridPos.Y*brickSize*Game1.scaleRatio,
                 GridPos.Z*brickSize*Game1.scaleRatio);
@@ -46,7 +49,7 @@ namespace Brickles
         public void setBrickType(BrickType type)
         {
             Type = type;
-            Model = AssetManager.getBrickModel(Type);       //change brick model to appropriate special type
+            Model = scene.game.assetManager.getBrickModel(Type);       //change brick model to appropriate special type
         }
 
         public void hitBrick()
@@ -54,12 +57,12 @@ namespace Brickles
             if (Type == BrickType.Treasure)
             {
                 Type = BrickType.Dead;
-                Game1.game.Player.Score += 10;
+                scene.Player.Score += 10;
             }
             else if (Type == BrickType.Normal)
             {
                 Type = BrickType.Dead;
-                Game1.game.Player.Score += 5;
+                scene.Player.Score += 5;
             }
         }
 

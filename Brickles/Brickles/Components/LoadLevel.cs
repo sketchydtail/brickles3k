@@ -7,13 +7,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Brickles
 {
-    internal class LoadLevel
+    public class LoadLevel
     {
         private readonly List<Vector3> sortedBricks = new List<Vector3>(); //intermediate lists
         private List<Vector3> BrickList = new List<Vector3>();
+        public Game1 scene;
 
-        public LoadLevel(String filename)
+        public LoadLevel(String filename, Scene scene)
         {
+            this.scene = (Game1)scene;
             ParseCSV(ReadFile(filename));
             SortBricks(); //sort bricks before generating brick positions;
             GenerateBrickPos();
@@ -60,7 +62,7 @@ namespace Brickles
 
 
             //measure the brick model
-            foreach (ModelMesh mesh in Game1.game.brickModel.Meshes)
+            foreach (ModelMesh mesh in scene.brickModel.Meshes)
             {
                 BoundingSphere bs = mesh.BoundingSphere;
                 brickSize = bs.Radius;
@@ -74,19 +76,19 @@ namespace Brickles
                 {
                     //apply scaling and transform then add it to the list - 'temp' is just used for debugging purposes
                    // Console.WriteLine("X:" + brick.X + " Y:" + brick.Y + " Z:" + brick.Z);
-                    Game1.game.Bricks.AddLast(new Brick(brick, brickSize)); //create a new brick in dictionary
+                    scene.Bricks.AddLast(new Brick(scene, brick, brickSize)); //create a new brick in dictionary
                 }
             }
             Console.WriteLine("Brick processing complete!");
-            Console.WriteLine(" Created " + Game1.game.Bricks.Count + " brix");
-            GenerateSpecialBricks(Game1.game.difficulty);
+            Console.WriteLine(" Created " + scene.Bricks.Count + " brix");
+            GenerateSpecialBricks(scene.difficulty);
         }
 
         private void GenerateSpecialBricks(Difficulty dif)
         {
             float specialPercent = 0;         //overal percentage of special bricks
             float treasurePercent = 0;
-            int totalBricks = Game1.game.Bricks.Count;
+            int totalBricks = scene.Bricks.Count;
             switch (dif)
             {
                 case Difficulty.Tutorial:
@@ -121,12 +123,12 @@ namespace Brickles
             {
                 
                 int b = rand.Next(totalBricks - 1);         //choose a random brick
-                Game1.game.Bricks.ElementAt(b).setBrickType(BrickType.Unbreakable);     //set to unbreakable
+                scene.Bricks.ElementAt(b).setBrickType(BrickType.Unbreakable);     //set to unbreakable
             }
             for (int t = treasureCount; t > 0; t--)         //bug: treasure bricks can overwrite unbreakable bricks... not a huge issue
             {
                 int b = rand.Next(totalBricks - 1);         //choose a random brick
-                Game1.game.Bricks.ElementAt(b).setBrickType(BrickType.Treasure);     //set to treasure
+                scene.Bricks.ElementAt(b).setBrickType(BrickType.Treasure);     //set to treasure
             }
         }
 

@@ -15,10 +15,14 @@ namespace Brickles
         Debug
     };
 
-    public static class Text
+    public class Text
     {
-
-        public static void DrawText(SpriteFont font, String text, TextTypes type)
+        public Scene scene;
+        public Text(Scene scene)
+        {
+            this.scene = scene;
+        }
+        public void DrawText(SpriteFont font, String text, TextTypes type)
         {
 
             // Find the center of the string
@@ -32,7 +36,7 @@ namespace Brickles
                 case TextTypes.Debug:
                     break;
                 case TextTypes.Health:
-                    FontPos = new Vector2(Game1.game.GraphicsDevice.Viewport.Width - font.MeasureString(text).X, Game1.game.GraphicsDevice.Viewport.Height - 40);
+                    FontPos = new Vector2(scene.game.GraphicsDevice.Viewport.Width - font.MeasureString(text).X, scene.game.GraphicsDevice.Viewport.Height - 40);
                     textColour = Color.Red;
                     break;
                 case TextTypes.Message:
@@ -42,10 +46,10 @@ namespace Brickles
                    // FontPos = new Vector2(20f,50f);
                     break;
             }
-            Game1.game.spriteBatch.Begin();
-            Game1.game.spriteBatch.DrawString(font, text, FontPos, textColour,
+            scene.game.spriteBatch.Begin();
+            scene.game.spriteBatch.DrawString(font, text, FontPos, textColour,
                 0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
-            Game1.game.spriteBatch.End();
+            scene.game.spriteBatch.End();
         }
     }
 }
