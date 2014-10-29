@@ -73,7 +73,7 @@ namespace Brickles
                 if (brick != null)
                 {
                     //apply scaling and transform then add it to the list - 'temp' is just used for debugging purposes
-                    //Console.WriteLine("Z:" + brick.Z);
+                   // Console.WriteLine("X:" + brick.X + " Y:" + brick.Y + " Z:" + brick.Z);
                     Game1.game.Bricks.AddLast(new Brick(brick, brickSize)); //create a new brick in dictionary
                 }
             }
@@ -173,23 +173,24 @@ namespace Brickles
             //get first number (x)
             int startChar = 0;
             int endChar = Vector3string.IndexOf(",");
-            var returnx = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar - 1));
+            var returnx = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar));
             returnx = Convert.ToInt32(returnx);
             //get second number (y)
             Vector3string = Vector3string.Substring(endChar + 1, Vector3string.Length - endChar - 1);
             endChar = Vector3string.IndexOf(",");
-            var returny = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar - 1));
+            var returny = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar));
             returny = Convert.ToInt32(returny);
             //get third number (z)
-            Vector3string = Vector3string.Substring(endChar + 1, Vector3string.Length - endChar - 1);
+            Vector3string = Vector3string.Substring(endChar + 1, Vector3string.Length - endChar - 2);
             endChar = Vector3string.Length;
-            var returnz = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar - 1));
+            var returnz = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar -1));
             returnz = Convert.ToInt32(returnz);
 
             //remove these to return to single spacing
-            returnx = returnx/2;
-            returny = returny/2;
-            returnz = returnz/2;
+          //  returnx = returnx/2;
+          //  returny = returny/2;
+           // returnz = returnz/2;
+            //Console.WriteLine("Z:" + returnz);
             return new Vector3(returnx, returny, returnz);
         }
     }

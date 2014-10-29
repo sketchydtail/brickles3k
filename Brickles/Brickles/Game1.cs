@@ -66,7 +66,7 @@ namespace Brickles
         public Vector3 paddlePos;
 
         public Difficulty difficulty = Difficulty.Medium;
-        public Controller controller = Controller.Gamepad;
+        public Controller controller = Controller.Keyboard;
 
 
         private Vector3 nextVector = Vector3.Forward;
@@ -258,7 +258,7 @@ namespace Brickles
             _kinectMan.Draw(gameTime);
 
 
-            Console.WriteLine("Paddlepos: " + paddlePos);
+            //Console.WriteLine("Paddlepos: " + paddlePos);
             paddleModel.Draw(paddleTransform, ViewMatrix, ProjectionMatrix);
 
             Text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);

@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Texture\" />
+    <Folder Include="Sounds\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\WallTexture.png">
