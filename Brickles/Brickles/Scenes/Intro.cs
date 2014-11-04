@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Brickles
 {
@@ -12,10 +14,23 @@ namespace Brickles
     {
         private Texture2D splash;
         private GameManager game;
+        private Video introvid;
+        private VideoPlayer player;
+
+        private Song introMusic;
+
+        private int screenWidth;
+        private int screenHeight;
+        private bool played = false;
+
+        private KeyboardState keystate;
 
         public Intro(GameManager game) : base (game)
         {
+            
             this.game = game;
+            screenWidth = game.GraphicsDevice.Viewport.Width;
+            screenHeight = game.GraphicsDevice.Viewport.Height;
         }
 
         public override void Initialize()
@@ -25,18 +40,28 @@ namespace Brickles
 
         protected override void LoadContent()
         {
-            splash = game.Content.Load<Texture2D>("Sprites/Splash");
-            Console.WriteLine("Intro loaded");
+            introvid = game.Content.Load<Video>("Video/intro_render");
+            introMusic = game.Content.Load<Song>("Music/intro");
+            player = new VideoPlayer();
+            
         }
 
         public override void Update(GameTime gameTime)
         {
-
-            Console.WriteLine("Gametime: " + gameTime.TotalGameTime.TotalSeconds);
-
-            if (gameTime.TotalGameTime.TotalSeconds > 5)
+            keystate = Keyboard.GetState();
+            if ((player.State == MediaState.Stopped && played) || (MediaPlayer.State == MediaState.Stopped && played) || keystate.IsKeyDown(Keys.Escape) || keystate.IsKeyDown(Keys.Space))
             {
+                MediaPlayer.Stop();
+                introMusic = null;
                 NextScene();
+            }
+
+            else if (player.State == MediaState.Stopped)
+            {
+                player.IsLooped = false;
+                player.Play(introvid);
+                played = true;
+                MediaPlayer.Play(introMusic);
             }
 
             base.Update(gameTime);
@@ -44,19 +69,25 @@ namespace Brickles
 
         public override void Draw(GameTime gameTime)
         {
-            game.spriteBatch.Begin();
-            game.spriteBatch.Draw(splash, new Rectangle(0,0,1024,768), Color.White);
-            
-            game.spriteBatch.End();
+
+            Texture2D videoTexture = null;
+
+            if (player.State != MediaState.Stopped)
+                videoTexture = player.GetTexture();
+
+            if (videoTexture != null)
+            {
+                game.spriteBatch.Begin();
+                game.spriteBatch.Draw(videoTexture, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                game.spriteBatch.End();
+            }
             
             base.Draw(gameTime);
-            //
         }
 
         private void NextScene()
         {
-            //Thread.Sleep(3000);
-            game.setScene(GameScene.Game);
+            game.setScene(GameScene.Menu);
         }
 
     }

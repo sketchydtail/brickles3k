@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Brickles
 {
@@ -70,6 +71,12 @@ namespace Brickles
         public SoundEffect Recycle;
         public SoundEffect WallBounce;
 
+
+        public Song song1;
+
+        public bool addBall = false;
+        
+
         
 
         public Difficulty difficulty = Difficulty.Medium;
@@ -125,6 +132,8 @@ namespace Brickles
             Recycle = game.Content.Load<SoundEffect>("Sounds/recycle");
             WallBounce = game.Content.Load<SoundEffect>("Sounds/wall_bounce");
 
+            song1 = game.Content.Load<Song>("Music/menu");
+            
 
         }
 
@@ -134,12 +143,18 @@ namespace Brickles
 
         public override void Update(GameTime gameTime)
         {
-            var timeDelta = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            if (MediaPlayer.State == MediaState.Stopped)
+            {
+                MediaPlayer.Play(song1);
+            }
+
+           // var timeDelta = (float) gameTime.ElapsedGameTime.TotalSeconds;
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back ==
                 ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 game.Exit();
 
+            
 
             foreach (Ball b in Balls)
             {
@@ -149,6 +164,8 @@ namespace Brickles
                 UpdateInput();
 
                 UpdatePaddlePosition();
+
+                
 
                 foreach (Brick brick in Bricks)
                 {
@@ -165,7 +182,24 @@ namespace Brickles
 
             }
 
+            SpawnBall();        //spawn a ball if requested
+
             base.Update(gameTime);
+        }
+
+        public void TriggerBallSpawn()
+        {
+            addBall = true;
+        }
+
+        private void SpawnBall()
+        {
+            if (addBall)
+            {
+                Balls.RemoveFirst();
+                Balls.AddFirst(new Ball(this));
+                addBall = false;
+            }
         }
 
         protected void UpdateInput()
@@ -228,7 +262,7 @@ namespace Brickles
         public override void Draw(GameTime gameTime)
         {
             game.GraphicsDevice.Clear(Color.CornflowerBlue);
-            game.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;         //turn off texture blurring for nice sharp retro look
+            
 
                 Court.Draw(gameTime);
             

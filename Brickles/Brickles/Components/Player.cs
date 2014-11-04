@@ -61,6 +61,12 @@ namespace Brickles
             {
                 moveX = 1 * moveSensitivity;
             }
+
+            if (keyboardState.IsKeyDown(Keys.Space))        //respawn the ball if you press 
+            {
+                //scene.Balls.RemoveFirst();
+                scene.TriggerBallSpawn();
+            }
             
             scene.paddlePos = CheckBounds(new Vector3 (oldX + moveX, oldY + moveY, 2400f));
         }

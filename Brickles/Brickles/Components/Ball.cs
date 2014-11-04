@@ -26,7 +26,8 @@ namespace Brickles
             this.scene = scene;
             Model = scene.game.assetManager.getBallModel(balls.Normal);
 
-            Position = new Vector3(0, 0, 2900f); //save modified position
+            //Position = new Vector3(0, 0, 2900f); //save modified position
+            Position = scene.paddlePos;
             LocalTransforms = new Matrix[Model.Bones.Count];
             RotateV = new Vector3(0, MathHelper.ToRadians(3), 0);
         }
@@ -71,6 +72,13 @@ namespace Brickles
 
            // RotateV.X = oldPos.X + speed * (float)Math.Cos(direction);
            // position.Y = oldPos.Y + speed * (float)Math.Sin(direction);
+
+            Random random = new Random();
+            RotateV.X = Position.X * bounce * random.Next();
+            RotateV.Y = Position.Y * bounce * random.Next();
+            RotateV.Z = Position.Z * bounce * random.Next();
+
+
             scene.brickBounce.Play();
 
         }

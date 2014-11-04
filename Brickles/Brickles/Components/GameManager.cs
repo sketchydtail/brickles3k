@@ -25,6 +25,7 @@ namespace Brickles
 
         private Game1 game;
         private Intro intro;
+        private Menu menu;
         
 
         public GameManager()
@@ -44,14 +45,29 @@ namespace Brickles
         protected override void Initialize()
         {
             //GraphicsDevice does not exist in the constructor, so the game must be resized here.
+            //graphics.IsFullScreen = true; // make it fullscreen
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width; //set game width to screen width
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height; //set game height to screen height
-            //graphics.IsFullScreen = true; // make it fullscreen
+            
+            //SamplerState sstate = new SamplerState();
+            //sstate.AddressU = TextureAddressMode.Wrap;
+            //sstate.AddressV = TextureAddressMode.Wrap;
+            //sstate = SamplerState.PointWrap;
+            //GraphicsDevice.SamplerStates[0] = sstate;
+
+            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
+            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
+             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;         //turn off texture blurring for nice sharp retro look
+            
             graphics.ApplyChanges();
 
             intro = new Intro(this);
             intro.Enabled = true;
             intro.Visible = true;
+
+            menu = new Menu(this);
+            menu.Enabled = false;
+            menu.Visible = false;
 
             game = new Game1(this);
             game.Enabled = false;
@@ -60,6 +76,7 @@ namespace Brickles
 
 
             Components.Add(intro);
+            Components.Add(menu);
             Components.Add(game);
             
             //Services.RemoveService(typeof(Intro));
@@ -124,12 +141,24 @@ namespace Brickles
                     intro.Enabled = true;
                     game.Enabled = false;
                     game.Visible = false;
+                    menu.Enabled = false;
+                    menu.Visible = false;
                     break;
                 case GameScene.Game:
                     intro.Visible = false;
                     intro.Enabled = false;
                     game.Enabled = true;
                     game.Visible = true;
+                    menu.Enabled = false;
+                    menu.Visible = false;
+                    break;
+                case GameScene.Menu:
+                    intro.Visible = false;
+                    intro.Enabled = false;
+                    game.Enabled = false;
+                    game.Visible = false;
+                    menu.Enabled = true;
+                    menu.Visible = true;
                     break;
             }
             
