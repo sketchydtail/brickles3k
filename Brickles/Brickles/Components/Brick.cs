@@ -1,8 +1,4 @@
-﻿using System;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 
 namespace Brickles
 {
@@ -13,22 +9,22 @@ namespace Brickles
         Treasure,
         Dead
     };
+
     public class Brick : GameObject
     {
-
         public Vector3 Colour;
         public Vector3 GridPos; //the value read from csv
-        public BoundingBox bounding;
         public BrickType Type;
-       // public Game1 scene;
-        
+        public BoundingBox bounding;
+        // public Game1 scene;
+
 
         public Brick(Game1 scene, Vector3 gridPos, float brickSize) : base(scene)
         {
             this.scene = scene;
             GridPos = gridPos;
-            Type = BrickType.Normal;            //set brick type
-            Model = scene.game.assetManager.getBrickModel(Type);       //load normal brick model
+            Type = BrickType.Normal; //set brick type
+            Model = scene.game.assetManager.getBrickModel(Type); //load normal brick model
 
             Position = new Vector3(GridPos.X*brickSize*Game1.scaleRatio, GridPos.Y*brickSize*Game1.scaleRatio,
                 GridPos.Z*brickSize*Game1.scaleRatio);
@@ -49,7 +45,7 @@ namespace Brickles
         public void setBrickType(BrickType type)
         {
             Type = type;
-            Model = scene.game.assetManager.getBrickModel(Type);       //change brick model to appropriate special type
+            Model = scene.game.assetManager.getBrickModel(Type); //change brick model to appropriate special type
         }
 
         public void hitBrick()
@@ -65,6 +61,5 @@ namespace Brickles
                 scene.Player.Score += 5;
             }
         }
-
     }
 }

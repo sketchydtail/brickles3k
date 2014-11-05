@@ -16,14 +16,13 @@ namespace Brickles
         public Texture2D depthVideo;
         public KinectSensor kinect;
         public bool kinected;
+        public Game1 scene;
         public Skeleton skeleton;
         public Skeleton[] skeletonData;
 
-        public Game1 scene;
-
         public KinectManager(Scene s)
         {
-            this.scene = (Game1)s;
+            scene = (Game1) s;
             try
             {
                 KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
@@ -100,7 +99,6 @@ namespace Brickles
             if (kinect.Status == KinectStatus.Connected)
             {
                 InitializeKinect();
-
             }
         }
 
@@ -239,14 +237,12 @@ namespace Brickles
                         (((-0.5f*joint.Position.Y) + 0.5f)*(resolution.Y)));
                     Joint rightHand = skeleton.Joints[JointType.HandRight];
                     //Game1.game.handPosition =
-                       // new Vector2(((((0.5f*rightHand.Position.X) + 0.5f)*(resolution.X)) - hand.Width/2),
-                       //     ((((-0.5f*rightHand.Position.Y) + 0.5f)*(resolution.Y))) - hand.Height/2);
+                    // new Vector2(((((0.5f*rightHand.Position.X) + 0.5f)*(resolution.X)) - hand.Width/2),
+                    //     ((((-0.5f*rightHand.Position.Y) + 0.5f)*(resolution.Y))) - hand.Height/2);
 
 
-                        scene.paddlePos = new Vector3(rightHand.Position.X*(resolution.X/2),
-                            rightHand.Position.Y*(resolution.Y/2), 2400f);
-                    
-
+                    scene.paddlePos = new Vector3(rightHand.Position.X*(resolution.X/2),
+                        rightHand.Position.Y*(resolution.Y/2), 2400f);
 
 
                     spriteBatch.Draw(img,
@@ -289,7 +285,7 @@ namespace Brickles
                     new Rectangle(0, 0, GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height),
                     Color.White); */
                 //spriteBatch.Draw(depthVideo, new Rectangle(0,0,screenWidth,240), Color.White);
-               // Game1.game.spriteBatch.Draw(hand, Game1.game.handPosition, Color.White);
+                // Game1.game.spriteBatch.Draw(hand, Game1.game.handPosition, Color.White);
 
                 DrawSkeleton(scene.game.spriteBatch,
                     new Vector2(scene.game.graphics.PreferredBackBufferWidth,

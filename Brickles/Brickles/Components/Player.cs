@@ -64,7 +64,6 @@ namespace Brickles
 
             if (keyboardState.IsKeyDown(Keys.Space))        //respawn the ball if you press 
             {
-                //scene.Balls.RemoveFirst();
                 scene.TriggerBallSpawn();
             }
             

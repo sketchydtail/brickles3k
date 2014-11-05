@@ -1,22 +1,20 @@
-﻿using System;
-using System.Net.PeerToPeer.Collaboration;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Brickles
 {
     public class GameObject
     {
-        public Game1 scene;
+        public Matrix[] LocalTransforms;
         public Model Model;
         public Vector3 Position;
-        public Matrix Transform;
-        public Matrix[] LocalTransforms;
-        public VertexPositionTexture[] tex;
-        public Matrix Rotation;
         public Vector3 RotateV;
+        public Matrix Rotation;
+        public Matrix Transform;
         public Matrix World;
-        
+        public Game1 scene;
+        public VertexPositionTexture[] tex;
+
 
         public GameObject(Game1 scene)
         {

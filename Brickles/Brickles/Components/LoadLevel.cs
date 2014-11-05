@@ -15,7 +15,7 @@ namespace Brickles
 
         public LoadLevel(String filename, Scene scene)
         {
-            this.scene = (Game1)scene;
+            this.scene = (Game1) scene;
             ParseCSV(ReadFile(filename));
             SortBricks(); //sort bricks before generating brick positions;
             GenerateBrickPos();
@@ -75,7 +75,7 @@ namespace Brickles
                 if (brick != null)
                 {
                     //apply scaling and transform then add it to the list - 'temp' is just used for debugging purposes
-                   // Console.WriteLine("X:" + brick.X + " Y:" + brick.Y + " Z:" + brick.Z);
+                    // Console.WriteLine("X:" + brick.X + " Y:" + brick.Y + " Z:" + brick.Z);
                     scene.Bricks.AddLast(new Brick(scene, brick, brickSize)); //create a new brick in dictionary
                 }
             }
@@ -86,7 +86,7 @@ namespace Brickles
 
         private void GenerateSpecialBricks(Difficulty dif)
         {
-            float specialPercent = 0;         //overal percentage of special bricks
+            float specialPercent = 0; //overal percentage of special bricks
             float treasurePercent = 0;
             int totalBricks = scene.Bricks.Count;
             switch (dif)
@@ -94,41 +94,41 @@ namespace Brickles
                 case Difficulty.Tutorial:
                     specialPercent = 0.15f;
                     treasurePercent = 1f;
-                    break;                      //tutorial gets 15% special, all of which are treasure
+                    break; //tutorial gets 15% special, all of which are treasure
                 case Difficulty.Easy:
-                    specialPercent = 0.1f;      //easy gets 10% special, 80% of which are treasure
+                    specialPercent = 0.1f; //easy gets 10% special, 80% of which are treasure
                     treasurePercent = 0.8f;
                     break;
-                case Difficulty.Medium:         //medium gets 5% specials, 50% of which are treasure
+                case Difficulty.Medium: //medium gets 5% specials, 50% of which are treasure
                     specialPercent = 0.05f;
                     treasurePercent = 0.5f;
                     break;
                 case Difficulty.Hard:
-                    specialPercent = 0.1f;      //hard gets 10% specials, 20% of which are treasure
+                    specialPercent = 0.1f; //hard gets 10% specials, 20% of which are treasure
                     treasurePercent = 0.2f;
                     break;
-                case Difficulty.Impossible:     //impossible gets 15% special, all of which are unbreakable
+                case Difficulty.Impossible: //impossible gets 15% special, all of which are unbreakable
                     specialPercent = 0.15f;
                     treasurePercent = 0f;
                     break;
             }
 
-            int specialCount = (int)Math.Round(totalBricks*specialPercent);
-            int treasureCount = (int) Math.Round(specialCount*treasurePercent);
+            var specialCount = (int) Math.Round(totalBricks*specialPercent);
+            var treasureCount = (int) Math.Round(specialCount*treasurePercent);
             int unbreakableCount = specialCount - treasureCount;
 
 
-            Random rand = new Random();
-            for (int i = unbreakableCount; i > 0; i--)      //foreach unbreakable brick
+            var rand = new Random();
+            for (int i = unbreakableCount; i > 0; i--) //foreach unbreakable brick
             {
-                
-                int b = rand.Next(totalBricks - 1);         //choose a random brick
-                scene.Bricks.ElementAt(b).setBrickType(BrickType.Unbreakable);     //set to unbreakable
+                int b = rand.Next(totalBricks - 1); //choose a random brick
+                scene.Bricks.ElementAt(b).setBrickType(BrickType.Unbreakable); //set to unbreakable
             }
-            for (int t = treasureCount; t > 0; t--)         //bug: treasure bricks can overwrite unbreakable bricks... not a huge issue
+            for (int t = treasureCount; t > 0; t--)
+                //bug: treasure bricks can overwrite unbreakable bricks... not a huge issue
             {
-                int b = rand.Next(totalBricks - 1);         //choose a random brick
-                scene.Bricks.ElementAt(b).setBrickType(BrickType.Treasure);     //set to treasure
+                int b = rand.Next(totalBricks - 1); //choose a random brick
+                scene.Bricks.ElementAt(b).setBrickType(BrickType.Treasure); //set to treasure
             }
         }
 
@@ -185,14 +185,8 @@ namespace Brickles
             //get third number (z)
             Vector3string = Vector3string.Substring(endChar + 1, Vector3string.Length - endChar - 2);
             endChar = Vector3string.Length;
-            var returnz = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar -1));
+            var returnz = (float) Convert.ToDecimal(Vector3string.Substring(startChar, endChar - 1));
             returnz = Convert.ToInt32(returnz);
-
-            //remove these to return to single spacing
-          //  returnx = returnx/2;
-          //  returny = returny/2;
-           // returnz = returnz/2;
-            //Console.WriteLine("Z:" + returnz);
             return new Vector3(returnx, returny, returnz);
         }
     }

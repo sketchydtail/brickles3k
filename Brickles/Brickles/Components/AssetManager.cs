@@ -1,20 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Brickles
 {
-    public enum balls { Normal, Steel, Super };
+    public enum balls
+    {
+        Normal,
+        Steel,
+        Super
+    };
+
     public class AssetManager
     {
+        private readonly Random rand = new Random();
         public Model[] brickModels = new Model[11];
+        public Game game;
         public Model treasureBrickModel;
         public Model unbreakableBrickModel;
-        public Game game;
-        Random rand = new Random();
 
         public AssetManager(Game game)
         {
@@ -37,12 +40,10 @@ namespace Brickles
 
             treasureBrickModel = game.Content.Load<Model>("Models/Chest_Brick");
             unbreakableBrickModel = game.Content.Load<Model>("Models/Unbreakable_Brick");
-
         }
 
         private Model getRandomBrickModel()
         {
-            
             int randValue = rand.Next(0, 10);
 
             return brickModels[randValue];
@@ -59,13 +60,12 @@ namespace Brickles
             {
                 return unbreakableBrickModel;
             }
-            
+
             return getRandomBrickModel();
         }
 
         public Model getBallModel(balls b)
         {
-
             switch (b)
             {
                 case balls.Normal:
@@ -73,7 +73,6 @@ namespace Brickles
                     break;
             }
             return null;
-
         }
     }
 }

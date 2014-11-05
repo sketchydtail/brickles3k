@@ -13,8 +13,6 @@ namespace Brickles
     ///     All code  created by the wonderfully talented Sketchy.D.Tail (AKA. Julian Hunt) - Copyright September 2014
     ///     Any resemblance to other code is purely concidental.
     /// </summary>
-    /// 
-
     public enum Difficulty
     {
         Tutorial,
@@ -34,66 +32,51 @@ namespace Brickles
     public class Game1 : Scene
     {
         public const float scaleRatio = 1f; //scale everything by this much
+        public static Matrix ProjectionMatrix;
+        public static Matrix ViewMatrix;
 
         private readonly Vector3 cameraPosition = new Vector3(0, 0, 3000f);
         private readonly Vector3 cameraTarget = new Vector3(0f, 0f, 0f);
 
-        public Text text;
-
+        public LinkedList<Ball> Balls = new LinkedList<Ball>(); //list of balls for multiball compatibility
         public LinkedList<Brick> Bricks = new LinkedList<Brick>();
-        public LinkedList<Ball> Balls = new LinkedList<Ball>();         //list of balls for multiball compatibility
         public Court Court;
         private LoadLevel Level;
+        public SoundEffect MenuNotify;
+        public SoundEffect Notify;
         public Player Player;
-        public static Matrix ProjectionMatrix;
-        public static Matrix ViewMatrix;
-        public KinectManager _kinectMan;
+        public SoundEffect Recycle;
         public SpriteFont ScoreFont;
+        public SoundEffect WallBounce;
+        public KinectManager _kinectMan;
+        public bool addBall = false;
+        public SoundEffect brickBounce;
 
         public Model brickModel;
         private int camAngle = 0;
         private Vector3 cameraUpVector = Vector3.Up;
+        public Controller controller = Controller.Keyboard;
         public Model courtModel;
 
         public Boolean debugging = true;
+        public Difficulty difficulty = Difficulty.Medium;
         public Vector2 handPosition;
 
-        public Model paddleModel;
-        public Matrix paddleTransform;
-        public Vector3 paddlePos;
-
-
-        public SoundEffect brickBounce;
         public SoundEffect laser;
         public SoundEffect levelComplete;
-        public SoundEffect MenuNotify;
-        public SoundEffect Notify;
-        public SoundEffect Recycle;
-        public SoundEffect WallBounce;
-
-
-        public Song song1;
-
-        public bool addBall = false;
-        
-
-        
-
-        public Difficulty difficulty = Difficulty.Medium;
-        public Controller controller = Controller.Keyboard;
 
 
         private Vector3 nextVector = Vector3.Forward;
-
-        //private Effect postComplementShader;
-
-        //public SpriteBatch spriteBatch;
+        public Model paddleModel;
+        public Vector3 paddlePos;
+        public Matrix paddleTransform;
+        public Song song1;
+        public Text text;
 
 
         public Game1(GameManager game) : base(game)
         {
             this.game = game;
-            
         }
 
         public override void Initialize()
@@ -104,9 +87,7 @@ namespace Brickles
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(0.9f, game.GraphicsDevice.Viewport.AspectRatio, 0.1f,
                 5000f);
 
-            
-
-            paddlePos = new Vector3(0, 0, 2400f);        //set paddle in middle of screen
+            paddlePos = new Vector3(0, 0, 2400f); //set paddle in middle of screen
 
             base.Initialize();
         }
@@ -133,8 +114,6 @@ namespace Brickles
             WallBounce = game.Content.Load<SoundEffect>("Sounds/wall_bounce");
 
             song1 = game.Content.Load<Song>("Music/menu");
-            
-
         }
 
         protected override void UnloadContent()
@@ -148,13 +127,12 @@ namespace Brickles
                 MediaPlayer.Play(song1);
             }
 
-           // var timeDelta = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            // var timeDelta = (float) gameTime.ElapsedGameTime.TotalSeconds;
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back ==
                 ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 game.Exit();
 
-            
 
             foreach (Ball b in Balls)
             {
@@ -165,7 +143,6 @@ namespace Brickles
 
                 UpdatePaddlePosition();
 
-                
 
                 foreach (Brick brick in Bricks)
                 {
@@ -179,10 +156,9 @@ namespace Brickles
                         }
                     }
                 }
-
             }
 
-            SpawnBall();        //spawn a ball if requested
+            SpawnBall(); //spawn a ball if requested
 
             base.Update(gameTime);
         }
@@ -207,7 +183,6 @@ namespace Brickles
             // Get the game pad state.
             if (controller == Controller.Gamepad)
             {
-
                 GamePadState currentState = GamePad.GetState(PlayerIndex.One);
                 Player.UpdateController(currentState);
             }
@@ -216,7 +191,6 @@ namespace Brickles
                 KeyboardState keystate = Keyboard.GetState();
                 Player.UpdateKeyboard(keystate);
             }
-
         }
 
         private Ball.CollisionType CheckCollision(BoundingSphere sphere)
@@ -228,8 +202,8 @@ namespace Brickles
             }
 
             foreach (BoundingBox box in Court.bboxes)
-            if (box.Contains(sphere) != ContainmentType.Contains)
-                return Ball.CollisionType.Wall;
+                if (box.Contains(sphere) != ContainmentType.Contains)
+                    return Ball.CollisionType.Wall;
 
             return Ball.CollisionType.None;
         }
@@ -262,10 +236,10 @@ namespace Brickles
         public override void Draw(GameTime gameTime)
         {
             game.GraphicsDevice.Clear(Color.CornflowerBlue);
-            
 
-                Court.Draw(gameTime);
-            
+
+            Court.Draw(gameTime);
+
             foreach (Brick brick in Bricks)
             {
                 if (brick.Type != BrickType.Dead)
@@ -273,12 +247,12 @@ namespace Brickles
                     brick.Draw(gameTime);
                 }
             }
-            
+
             foreach (Ball ball in Balls)
             {
                 ball.Draw(gameTime);
             }
-            
+
 
             _kinectMan.Draw(gameTime);
 

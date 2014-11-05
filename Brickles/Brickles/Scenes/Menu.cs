@@ -1,61 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace Brickles
 {
-    class Menu : Scene
+    internal class Menu : Scene
     {
-        private enum SelectedItem
-        {
-            Play,
-            Options,
-            Highscores,
-            Collectables,
-            Quit
-        };
-
-        private GameManager game;
-
-        private int screenWidth;
-        private int screenHeight;
-        private bool played = false;
-
+        private readonly Vector3 MenuPos = new Vector3(0, 0, 0);
+        private readonly Vector3 cameraPosition = new Vector3(400, 300f, 1000f);
+        private readonly Vector3 cameraTarget = new Vector3(0f, 300f, 0f);
+        private Matrix MenuTransform;
+        private Matrix ProjectionMatrix;
+        private Matrix ViewMatrix;
         private Texture2D background;
 
-        private Model charModel ;
+        private Model charModel;
         private Model collectablesModel;
+        private GameManager game;
         private Model highScoresModel;
+        private KeyboardState keystate;
+        private KeyboardState lastState;
         private Model menuSceneModel;
         private Model optionsModel;
         private Model playModel;
+        private bool played = false;
         private Model quitModel;
-        private Model spaceBallModel;
-
-
-        private KeyboardState keystate;
-        private KeyboardState lastState;
-
-        private readonly Vector3 cameraPosition = new Vector3(400, 300f, 1000f);
-        private readonly Vector3 cameraTarget = new Vector3(0f, 300f, 0f);
-
-        private Matrix ViewMatrix;
-        private Matrix ProjectionMatrix;
-        private Matrix MenuTransform;
-
-        private Vector3 MenuPos = new Vector3(0,0,0);
+        private int screenHeight;
+        private int screenWidth;
 
         private SelectedItem selectedItem = SelectedItem.Play;
+        private Model spaceBallModel;
 
         public Menu(GameManager game)
             : base(game)
@@ -74,7 +49,6 @@ namespace Brickles
             MenuTransform = Matrix.CreateTranslation(MenuPos);
 
             base.Initialize();
-            
         }
 
         protected override void LoadContent()
@@ -93,7 +67,6 @@ namespace Brickles
 
         public override void Update(GameTime gameTime)
         {
-            
             keystate = Keyboard.GetState();
 
             if (keystate.IsKeyDown(Keys.Down) && !lastState.IsKeyDown(Keys.Up))
@@ -147,12 +120,12 @@ namespace Brickles
             //spaceBallModel.Draw(MenuTransform, ViewMatrix, ProjectionMatrix);
             //menuSceneModel.Draw(MenuTransform, ViewMatrix, ProjectionMatrix);
             //charModel.Draw(MenuTransform, ViewMatrix, ProjectionMatrix);
-            Rectangle bgrect = new Rectangle(0,0,game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height);
+            var bgrect = new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height);
             game.spriteBatch.Begin();
             //game.spriteBatch.Draw(background,new Vector2(0,0),Color.White);
             game.spriteBatch.Draw(background, bgrect, Color.White);
-           // game.spriteBatch.Draw(background, new Vector2(0,0), null,
-      //  Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            // game.spriteBatch.Draw(background, new Vector2(0,0), null,
+            //  Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             game.spriteBatch.End();
 
             bool playSelected = false;
@@ -190,7 +163,7 @@ namespace Brickles
             //optionsModel.Draw(MenuTransform, ViewMatrix, ProjectionMatrix);
             //playModel.Draw(MenuTransform, ViewMatrix, ProjectionMatrix);
             //quitModel.Draw(MenuTransform, ViewMatrix, ProjectionMatrix);
-            
+
 
             base.Draw(gameTime);
         }
@@ -218,12 +191,20 @@ namespace Brickles
                     }
                     else
                     {
-                        effect.DiffuseColor = new Vector3(0.9f,0.9f,0.9f);
+                        effect.DiffuseColor = new Vector3(0.9f, 0.9f, 0.9f);
                     }
                 }
                 mesh.Draw();
             }
         }
 
+        private enum SelectedItem
+        {
+            Play,
+            Options,
+            Highscores,
+            Collectables,
+            Quit
+        };
     }
 }

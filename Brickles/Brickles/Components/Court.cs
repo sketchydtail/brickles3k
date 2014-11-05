@@ -7,8 +7,9 @@ namespace Brickles
 {
     public class Court : GameObject
     {
-        public LinkedList<BoundingBox> bboxes = new LinkedList<BoundingBox>(); 
-        public Court(Game1 scene) : base (scene)
+        public LinkedList<BoundingBox> bboxes = new LinkedList<BoundingBox>();
+
+        public Court(Game1 scene) : base(scene)
         {
             this.scene = scene;
             Position = new Vector3(0, 0, 0); //save modified position
@@ -16,7 +17,6 @@ namespace Brickles
                         Matrix.CreateRotationX((float) Math.PI)*Matrix.CreateTranslation(Position);
             Model = scene.game.Content.Load<Model>("Models/Court");
             LocalTransforms = new Matrix[Model.Bones.Count];
-
         }
 
 
