@@ -218,13 +218,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\Splash.png">
-      <Name>Splash</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Sounds\brick_bounce.wav">
       <Name>brick_bounce</Name>
       <Importer>WavImporter</Importer>
@@ -319,6 +312,13 @@
   <ItemGroup>
     <Compile Include="Models\WallTexture_02.png">
       <Name>WallTexture_02</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sprites\heart.png">
+      <Name>heart</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

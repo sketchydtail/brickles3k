@@ -74,6 +74,9 @@ namespace Brickles
         public Text text;
 
 
+        Vector2 heartPosition;
+        Health heartBeat;
+
         public Game1(GameManager game) : base(game)
         {
             this.game = game;
@@ -88,6 +91,9 @@ namespace Brickles
                 5000f);
 
             paddlePos = new Vector3(0, 0, 2400f); //set paddle in middle of screen
+
+            //heartbeat code
+            heartBeat = new Health();
 
             base.Initialize();
         }
@@ -114,6 +120,11 @@ namespace Brickles
             WallBounce = game.Content.Load<SoundEffect>("Sounds/wall_bounce");
 
             song1 = game.Content.Load<Song>("Music/menu");
+
+
+            //heartbeat code
+            heartPosition = new Vector2((game.GraphicsDevice.Viewport.Width - (992 / 4)), game.GraphicsDevice.Viewport.Height - (960 / 6));
+            heartBeat.Initialize(game.Content.Load<Texture2D>("Sprites/heart"), heartPosition);
         }
 
         protected override void UnloadContent()
@@ -260,8 +271,15 @@ namespace Brickles
             //Console.WriteLine("Paddlepos: " + paddlePos);
             paddleModel.Draw(paddleTransform, ViewMatrix, ProjectionMatrix);
 
-            text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);
+            //text.DrawText(ScoreFont, "Health: " + Player.Health, TextTypes.Health);
             text.DrawText(ScoreFont, "Score: " + Player.Score, TextTypes.Score);
+
+
+            //heartbeat code
+            float time = (float)gameTime.TotalGameTime.TotalSeconds;
+            game.spriteBatch.Begin();
+            heartBeat.Draw(game.spriteBatch, time);
+            game.spriteBatch.End();
 
             base.Draw(gameTime);
         }

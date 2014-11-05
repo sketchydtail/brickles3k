@@ -90,6 +90,7 @@
     <Compile Include="Components\Court.cs" />
     <Compile Include="Components\GameManager.cs" />
     <Compile Include="Components\GameObject.cs" />
+    <Compile Include="Components\Health.cs" />
     <Compile Include="Scenes\Intro.cs" />
     <Compile Include="Components\KinectManager.cs" />
     <Compile Include="Components\LoadLevel.cs" />
