@@ -154,6 +154,7 @@ namespace Brickles
 
                 UpdatePaddlePosition();
 
+                b.PerformWallCollision();
 
                 foreach (Brick brick in Bricks)
                 {
