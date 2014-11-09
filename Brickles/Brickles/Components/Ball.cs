@@ -60,10 +60,10 @@ namespace Brickles
         {
 
             //it SHOULD make the ball hit bounces on the wall
-            //but it is not working
+            //but it is not working well
             //needs to be fixed
-            const float WALL_HEIGHT = 1.2f * 2019.592f; //courtsize radius is 2019.592f
-            const float FLOOR_PLANE_SIZE = 1.2f * 2019.592f;
+            const float WALL_HEIGHT = 1.2f * 900.000f; //courtsize radius is 2019.592f
+            const float FLOOR_PLANE_SIZE = 1.2f * 2000.000f;
             const float CAMERA_BOUNDS_MIN_X = -FLOOR_PLANE_SIZE;
             const float CAMERA_BOUNDS_MAX_X = FLOOR_PLANE_SIZE;
             const float CAMERA_BOUNDS_MIN_Y = -WALL_HEIGHT;
@@ -124,7 +124,7 @@ namespace Brickles
 
             RotateV.X = Position.X + speed * (float)Math.Cos(angleX);
             RotateV.Y = Position.Y + speed * (float)-Math.Sin(angleY);
-            RotateV.Z = Position.Z;
+            RotateV.Z = Position.Z + speed;
 
             //RANDOM BOUCING
 
